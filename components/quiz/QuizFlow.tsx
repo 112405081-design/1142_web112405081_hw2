@@ -62,7 +62,7 @@ export function QuizFlow() {
         const scores = calculateScores(nextAnswers);
         const category = getResultCategory(scores);
         clearQuizProgress();
-        router.push(`/quiz/result/${category}`);
+        router.push(`/quiz/loading?category=${category}`);
         return;
       }
       setSlideDirection("forward");
