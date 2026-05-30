@@ -1,0 +1,144 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  /* 樹葉深綠（按鈕、進度條） */
+  --quiz-leaf: #3d493f;
+  --quiz-leaf-dark: #5e7868;
+  --quiz-leaf-light: #3b584c;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-quiz-leaf: var(--quiz-leaf);
+  --color-quiz-leaf-dark: var(--quiz-leaf-dark);
+  --color-quiz-leaf-light: var(--quiz-leaf-light);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+/* 響應式：觸控友善、安全區域 */
+@layer utilities {
+  .touch-target {
+    min-height: 2.75rem;
+  }
+
+  .quiz-text-shadow {
+    text-shadow:
+      0 0 12px rgba(255, 255, 255, 0.85),
+      0 1px 2px rgba(255, 255, 255, 0.9);
+  }
+
+  .btn-quiz-leaf {
+    background-color: var(--quiz-leaf-dark);
+    color: #fff;
+  }
+
+  .btn-quiz-leaf:hover {
+    background-color: var(--quiz-leaf);
+  }
+}
+
+/* 換題：整頁由右往左滑入（視覺上往左翻頁） */
+@keyframes quiz-slide-forward {
+  from {
+    opacity: 0.85;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes quiz-slide-back {
+  from {
+    opacity: 0.85;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.quiz-slide-forward {
+  animation: quiz-slide-forward 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.quiz-slide-back {
+  animation: quiz-slide-back 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.quiz-slide-container {
+  overflow: hidden;
+  width: 100%;
+}
+
+@keyframes quiz-choice-tap {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(0.94);
+  }
+  70% {
+    transform: scale(1.03);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes quiz-choice-selected {
+  0% {
+    box-shadow: 0 0 0 0 rgba(30, 56, 41, 0.35);
+  }
+  100% {
+    box-shadow: 0 10px 25px -8px rgba(30, 56, 41, 0.5);
+  }
+}
+
+.quiz-choice {
+  transition:
+    transform 0.4s ease,
+    box-shadow 0.4s ease,
+    background-color 0.4s ease,
+    border-color 0.4s ease;
+}
+
+.quiz-choice:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.quiz-choice-tap {
+  animation: quiz-choice-tap 0.32s ease-out;
+}
+
+.quiz-choice-selected {
+  animation: quiz-choice-selected 0.35s ease-out forwards;
+}
+
+.quiz-tap {
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.quiz-tap:active:not(:disabled) {
+  transform: scale(0.95);
+  opacity: 0.85;
+}
